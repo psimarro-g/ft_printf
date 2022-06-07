@@ -22,7 +22,7 @@ NAME = libftprintf.a
 # **************************************************************************** #
 
 CC 		= gcc
-CFLAGS	= -Wall -Wextra -Werror -g #quitar g3 despues
+CFLAGS	= -Wall #-Wextra -Werror -g #quitar g3 despues
 RM		= rm -f
 
 # **************************************************************************** #
@@ -39,6 +39,7 @@ SRC =	ft_printf.c					ft_is_pnt_or_h.c		\
 		ft_print_str.c				ft_print_num.c 	\
 		ft_utils_1.c				ft_utils_2.c
 	
+TMAIN				=	CHECKS.c
 
 OBJ_DIR				=	obj/
 OBJ					= 	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
@@ -59,6 +60,9 @@ $(OBJ_DIR):
 
 $(NAME):			Libft/libft.a $(OBJ) 
 	ar rcs $(NAME) $(OBJ) Libft/obj/*.o 
+
+test:				re
+	$(CC) $(CFLAGS) -I Libft/inc/ -I inc/ -o $@ $(TMAIN) $(NAME)
 
 Libft/libft.a:
 	$(MAKE) -C Libft

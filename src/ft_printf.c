@@ -16,10 +16,10 @@ char	*get_esp(const char **format)
 {
 	char	*aux;
 
-	if (!ft_strchrs(*format + 1, "%cdisxXpu"))
+	if (!ft_strchrs(*format + 1, FSPECS))
 		return (0);
 	aux = ft_substr(*format, 1, ft_strlen(*format)
-			- ft_strlen(ft_strchrs(*format + 1, "%cdisxXpu")));
+			- ft_strlen(ft_strchrs(*format + 1, FSPECS)));
 	*format = *format + ft_strlen(aux);
 	return (aux);
 }
@@ -42,9 +42,9 @@ void	h_trigger(const char **format, va_list *argp, t_spf *esp)
 		aux = esp->cnt;
 		if (esp->cnt)
 			charge_strc(esp, argp);
-		if (!esp->cnt && write(1, "0", 1))
+		if (!esp->cnt)
 			return ;
-		t_end = ft_strchrs(esp->cnt, "%cdisxXpu");
+		t_end = ft_strchrs(esp->cnt, FSPECS);
 		if (*t_end == 'c' || *t_end == '%')
 			h_prc_char(esp, argp, *t_end);
 		else if (*t_end == 's')
