@@ -1,0 +1,16 @@
+
+
+#include "libft.h"
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*aux;
+
+	if (size > INT_MAX / count || !count || !size)
+		return (0);
+	aux = malloc(count * size);
+	if (!aux)
+		return (0);
+	ft_bzero(aux, count * size);
+	return (aux);
+}

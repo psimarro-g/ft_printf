@@ -13,7 +13,8 @@
 # **************************************************************************** #
 #                                   PROGRAM                                    #
 # **************************************************************************** #
-
+INC_DIR				=	inc/
+HEADER				= 	inc/libftprintf.h
 NAME = libftprintf.a
 
 # **************************************************************************** #
@@ -21,9 +22,8 @@ NAME = libftprintf.a
 # **************************************************************************** #
 
 CC 		= gcc
-CFLAGS	= -Wall -Wextra -Werror -g3 #quitar g3 despues
+CFLAGS	= -Wall -Wextra -Werror -g #quitar g3 despues
 RM		= rm -f
-AR		= ar -rcs
 
 # **************************************************************************** #
 #                                    PATHS                                     #
@@ -33,35 +33,47 @@ AR		= ar -rcs
 #                                   SOURCES                                    #
 # **************************************************************************** #
 
-SRCS =	ft_printf.c					ft_print_hex.c		\
-		ft_print_char.c				ft_print_str.c		\
-		ft_print_int.c				ft_print_uint.c		\
-		ft_print_ptr.c				ft_print_perc.c 	\
-		ft_utils_1.c				ft_utils_2.c			
+SRC_DIR				=	src/
+SRC =	ft_printf.c					ft_is_pnt_or_h.c		\
+		ft_num_utils.c				ft_print_char.c		\
+		ft_print_str.c				ft_print_num.c 	\
+		ft_utils_1.c				ft_utils_2.c
 	
 
-OBJS = $(SRCS:.c=.o)
+OBJ_DIR				=	obj/
+OBJ					= 	$(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
 
 # **************************************************************************** #
 #                                    RULES                                     #
 # **************************************************************************** #
 
-.c.o:		
-		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+all:		$(NAME)
 
-all: $(NAME)
+$(OBJ_DIR)%.o:		$(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -I $(INC_DIR) -I Libft/inc/ -c $< -o $@ 
 
-$(NAME): $(OBJS)
-	${AR} ${NAME} ${OBJS}
+$(OBJ): | $(OBJ_DIR)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(NAME):			Libft/libft.a $(OBJ) 
+	ar rcs $(NAME) $(OBJ) Libft/obj/*.o 
+
+Libft/libft.a:
+	$(MAKE) -C Libft
+
+.PHONY:		all clean fclean re			
 
 clean:
-			${RM} ${OBJS}
+	$(RM) -rf $(OBJ_DIR)
+	$(MAKE) -C Libft clean
 
-fclean:		clean
-			${RM} ${NAME}
+fclean:				clean
+	$(RM) $(NAME)
+	$(MAKE) -C Libft fclean
+	$(RM) test
 
 re:			fclean all
 
 bonus:
-
-.PHONY: all clean fclean re
