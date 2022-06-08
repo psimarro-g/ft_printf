@@ -64,13 +64,13 @@
 ** Reference: http://www.cplusplus.com/reference/cstdio/printf/
 */
 
-typedef struct s_spf
+typedef struct s_tprint
 {
-	char			*cnt;
+	char			*fid;
 	int				zero;
 	int				left;
 	int				width;
-	int				count;
+	int				tlen;
 	int				h_p;
 	int				prcn;
 	int				len;
@@ -80,7 +80,7 @@ typedef struct s_spf
 	int				plus;
 	int				space;
 	int				hash;
-}	t_spf;
+}	t_tprint;
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 ** MAIN FUNCTIONS
@@ -92,20 +92,20 @@ int				ft_printf(const char *format, ...);
 ** UTILS FUNCTIONS
 */
 
-void			precision(t_spf *esp, va_list *argp);
-void			draw_width(t_spf *esp);
-void			h_prc_char(t_spf *esp, va_list *argp, char percent);
-void			h_any_n(t_spf *esp, va_list *argp, char c);
-void			flags(t_spf *esp);
-void			draw_precision(t_spf *esp);
-void			width(t_spf *esp, va_list *argp);
-void			empty(t_spf *esp);
-void			h_string(t_spf *esp, va_list *argp);
-int				star(t_spf *esp, va_list *argp);
-int				is_negative(t_spf *esp, char **nn);
-char			*is_pnt_or_h(t_spf *esp, long long unsigned int n, char c);
-void			hash(t_spf *esp, char c, char *nn);
-void			sign(t_spf *esp, char **nn, char c);
-void			sign_draw(t_spf *esp, int k, char *nn, char c);
+void			precision(t_tprint *tab, va_list *args);
+void			draw_width(t_tprint *tab);
+void			print_prc_char(t_tprint *tab, va_list *args, char percent);
+void			print_any_num(t_tprint *tab, va_list *args, char c);
+void			flags(t_tprint *tab);
+void			draw_precision(t_tprint *tab);
+void			width(t_tprint *tab, va_list *args);
+void			empty(t_tprint *tab);
+void			print_string(t_tprint *tab, va_list *args);
+int				star(t_tprint *tab, va_list *args);
+int				is_negative(t_tprint *tab, char **nn);
+char			*is_pnt_or_h(t_tprint *tab, long long unsigned int n, char c);
+void			hash(t_tprint *tab, char c, char *nn);
+void			sign(t_tprint *tab, char **nn, char c);
+void			sign_draw(t_tprint *tab, int k, char *nn, char c);
 
 #endif

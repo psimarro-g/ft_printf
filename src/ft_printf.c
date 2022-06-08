@@ -12,7 +12,7 @@
 
 #include <ft_printf.h>
 
-char	*get_esp(const char **format)
+char	*get_spec(const char **format)
 {
 	char	*aux;
 
@@ -24,57 +24,57 @@ char	*get_esp(const char **format)
 	return (aux);
 }
 
-void	charge_strc(t_spf *esp, va_list *argp)
+void	fill_tab(t_print *tab, va_list *args)
 {
-	flags(esp);
-	width(esp, argp);
-	precision(esp, argp);
+	flags(tab);
+	width(tab, args);
+	precision(tab, args);
 }
 
-void	h_trigger(const char **format, va_list *argp, t_spf *esp)
+void	find_format(const char **format, va_list *args, t_tprint *tab)
 {
 	char	*t_end;
 	char	*aux;
 
 	if (**format == '%' && *format + 1)
 	{
-		esp->cnt = get_esp(format);
-		aux = esp->cnt;
-		if (esp->cnt)
-			charge_strc(esp, argp);
-		if (!esp->cnt)
+		tab->cnt = get_spec(format);
+		aux = tab->cnt;
+		if (tab->cnt)
+			fill_tab(tab, args);
+		if (!tab->cnt)
 			return ;
-		t_end = ft_strchrs(esp->cnt, FSPECS);
+		t_end = ft_strchrs(tab->cnt, FSPECS);
 		if (*t_end == 'c' || *t_end == '%')
-			h_prc_char(esp, argp, *t_end);
+			print_prc_char(tab, args, *t_end);
 		else if (*t_end == 's')
-			h_string(esp, argp);
+			print_string(tab, args);
 		else if (*t_end == 'i' || *t_end == 'd' || *t_end == 'x'
 			|| *t_end == 'X' || *t_end == 'u' || *t_end == 'p')
-			h_any_n(esp, argp, *t_end);
+			print_any_num(tab, args, *t_end);
 		free(aux);
 	}
 	else if (!(*format + 1))
 		return;
 	else
-		esp->count += write(1, *format, 1);
+		tab->tlen += write(1, *format, 1);
 }
 
 int	ft_printf(const char *format, ...)
 {
-	va_list	argp;
-	t_spf	*esp;
-	int		cnt;
+	va_list		args;
+	t_tprint	*tab;
+	int			cnt;
 
-	esp = (t_spf *)ft_calloc(1, sizeof(t_spf));
-	va_start(argp, format);
+	tab = (t_print *)ft_calloc(1, sizeof(t_print));
+	va_start(args, format);
 	while (*format)
 	{
-		h_trigger(&format, &argp, esp);
+		find_format(&format, &args, tab);
 		format++;
 	}
-	va_end(argp);
-	cnt = esp->count;
-	free(esp);
+	va_end(args);
+	cnt = tab->tlen;
+	free(tab);
 	return (cnt);
 }

@@ -1,89 +1,89 @@
 #include <ft_printf.h>
 
-void	flags(t_spf *esp)
+void	flags(t_tprint *tab)
 {
-	while (*esp->cnt == '0' || *esp->cnt == '-' || *esp->cnt == '+'
-		|| *esp->cnt == ' ' || *esp->cnt == '#')
+	while (*tab->fid == '0' || *tab->fid == '-' || *tab->fid == '+'
+		|| *tab->fid == ' ' || *tab->fid == '#')
 	{
-		if (*esp->cnt == '0')
-			esp->zero = 1;
-		else if (*esp->cnt == '-')
-			esp->left = 1;
-		else if (*esp->cnt == ' ')
-			esp->space = 1;
-		else if (*esp->cnt == '+')
-			esp->plus = 1;
-		else if (*esp->cnt == '#')
-			esp->hash = 1;
-		if (esp->zero == 1 && esp->left == 1)
-			esp->zero = 0;
-		if (esp->plus == 1)
-			esp->space = 0;
-		esp->cnt++;
+		if (*tab->fid == '0')
+			tab->zero = 1;
+		else if (*tab->fid == '-')
+			tab->left = 1;
+		else if (*tab->fid == ' ')
+			tab->space = 1;
+		else if (*tab->fid == '+')
+			tab->plus = 1;
+		else if (*tab->fid == '#')
+			tab->hash = 1;
+		if (tab->zero == 1 && tab->left == 1)
+			tab->zero = 0;
+		if (tab->plus == 1)
+			tab->space = 0;
+		tab->fid++;
 	}
 }
 
-void	width(t_spf *esp, va_list *argp)
+void	width(t_tprint *tab, va_list *args)
 {
-	esp->width = star(esp, argp);
-	if (!esp->h_w && *esp->cnt != '.')
+	tab->width = star(tab, args);
+	if (!tab->h_w && *tab->fid != '.')
 	{
-		esp->width = ft_atoi((const char *)esp->cnt);
-		if (esp->width)
-			while (*esp->cnt >= '0' && *esp->cnt <= '9')
-				esp->cnt++;
-		esp->h_w = 1;
+		tab->width = ft_atoi((const char *)tab->fid);
+		if (tab->width)
+			while (*tab->fid >= '0' && *tab->fid <= '9')
+				tab->fid++;
+		tab->h_w = 1;
 	}
-	if (esp->width < 0)
+	if (tab->width < 0)
 	{
-		esp->left = 1;
-		esp->width = -esp->width;
+		tab->left = 1;
+		tab->width = -tab->width;
 	}
 }
 
-void	precision(t_spf *esp, va_list *argp)
+void	precision(t_tprint *tab, va_list *args)
 {
-	if (*esp->cnt == '.')
+	if (*tab->fid == '.')
 	{
-		esp->h_p = 1;
-		esp->cnt++;
-		esp->prcn = star(esp, argp);
-		if (!esp->prcn)
+		tab->h_p = 1;
+		tab->fid++;
+		tab->prcn = star(tab, args);
+		if (!tab->prcn)
 		{
-			esp->prcn = ft_atoi((const char *)esp->cnt);
-			if (esp->prcn)
-				while (*esp->cnt >= '0' && *esp->cnt <= '9')
-					esp->cnt++;
+			tab->prcn = ft_atoi((const char *)tab->fid);
+			if (tab->prcn)
+				while (*tab->fid >= '0' && *tab->fid <= '9')
+					tab->fid++;
 		}
-		if (esp->prcn < 0)
+		if (tab->prcn < 0)
 		{
-			esp->n_p = 1;
-			esp->prcn = -esp->prcn;
+			tab->n_p = 1;
+			tab->prcn = -tab->prcn;
 		}
 	}
 	else
-		esp->h_p = 0;
+		tab->h_p = 0;
 }
 
 
-void	empty(t_spf *esp)
+void	empty(t_tprint *tab)
 {
 	int		auxcount;
 
-	auxcount = esp->count;
-	ft_bzero(esp, sizeof(*esp));
-	esp->count = auxcount;
+	auxcount = tab->count;
+	ft_bzero(tab, sizeof(*tab));
+	tab->count = auxcount;
 }
 
 
-int	star(t_spf *esp, va_list *argp)
+int	star(t_tprint *tab, va_list *args)
 {
-	if (*esp->cnt == '*')
+	if (*tab->fid == '*')
 	{
-		esp->cnt++;
-		if (!esp->h_p)
-			esp->h_w = 1;
-		return (va_arg(*argp, int));
+		tab->fid++;
+		if (!tab->h_p)
+			tab->h_w = 1;
+		return (va_arg(*args, int));
 	}
 	return (0);
 }

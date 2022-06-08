@@ -1,22 +1,22 @@
 #include <ft_printf.h>
 
-void	h_prc_char(t_spf *esp, va_list *argp, char percent)
+void	h_prc_char(t_tprint *tab, va_list *args, char percent)
 {
 	int		i;
 	char	character;
 
 	i = -1;
 	if (percent != '%')
-		character = va_arg(*argp, int);
+		character = va_arg(*args, int);
 	else
 		 character = percent;
-	esp->len = 1;
-	if (!esp->left)
-		while (esp->width-- > esp->len)
-			draw_width(esp);
-	esp->count += write(1, &character, 1);
-	if (esp->left)
-		while (esp->width-- > esp->len)
-			draw_width(esp);
-	empty(esp);
+	tab->len = 1;
+	if (!tab->left)
+		while (tab->width-- > tab->len)
+			draw_width(tab);
+	tab->count += write(1, &character, 1);
+	if (tab->left)
+		while (tab->width-- > tab->len)
+			draw_width(tab);
+	empty(tab);
 }

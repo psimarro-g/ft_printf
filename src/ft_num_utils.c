@@ -1,85 +1,85 @@
 #include <ft_printf.h>
 
-static void	draw_before(t_spf *esp)
+static void	draw_before(t_tprint *tab)
 {
-	if (esp->width < esp->len && esp->zero && esp->plus && !esp->negative)
+	if (tab->width < tab->len && tab->zero && tab->plus && !tab->negative)
 	{
-		esp->count += write(1, "+", 1);
-		esp->plus--;
+		tab->tlen += write(1, "+", 1);
+		tab->plus--;
 	}
-	if (esp->width > esp->len && !esp->h_p && esp->zero && esp->plus
-		&& !esp->negative)
+	if (tab->width > tab->len && !tab->h_p && tab->zero && tab->plus
+		&& !tab->negative)
 	{
-		esp->count += write(1, "+", 1);
-		esp->plus--;
+		tab->tlen += write(1, "+", 1);
+		tab->plus--;
 	}
-	if (esp->width < esp->len && esp->zero && esp->space && !esp->negative
-		&& !esp->plus)
+	if (tab->width < tab->len && tab->zero && tab->space && !tab->negative
+		&& !tab->plus)
 	{
-		esp->count += write(1, " ", 1);
-		esp->space--;
+		tab->tlen += write(1, " ", 1);
+		tab->space--;
 	}
-	if (esp->width > esp->len && !esp->h_p && esp->zero && esp->space
-		&& !esp->negative && !esp->plus)
+	if (tab->width > tab->len && !tab->h_p && tab->zero && tab->space
+		&& !tab->negative && !tab->plus)
 	{
-		esp->count += write(1, " ", 1);
-		esp->space--;
+		tab->tlen += write(1, " ", 1);
+		tab->space--;
 	}
 }
 
-static void	draw_after(t_spf *esp, char *nn, char c)
+static void	draw_after(t_tprint *tab, char *nn, char c)
 {
-	if (esp->negative)
-		esp->count += write(1, "-", 1);
-	if (esp->plus && !esp->negative)
-		esp->count += write(1, "+", 1);
-	if (esp->space && !esp->negative && !esp->plus)
-		esp->count += write(1, " ", 1);
-	if (!(esp->h_w && esp->zero && !esp->h_p))
-		hash(esp, c, nn);
+	if (tab->negative)
+		tab->tlen += write(1, "-", 1);
+	if (tab->plus && !tab->negative)
+		tab->tlen += write(1, "+", 1);
+	if (tab->space && !tab->negative && !tab->plus)
+		tab->tlen += write(1, " ", 1);
+	if (!(tab->h_w && tab->zero && !tab->h_p))
+		hash(tab, c, nn);
 }
 
-void	sign_draw(t_spf *esp, int k, char *nn, char c)
+void	sign_draw(t_tprint *tab, int k, char *nn, char c)
 {
 	if (k)
-		draw_before(esp);
+		draw_before(tab);
 	else if (!k)
-		draw_after(esp, nn, c);
+		draw_after(tab, nn, c);
 }
 
-static void	sign_negative(t_spf *esp, char **nn)
+static void	sign_negative(t_tprint *tab, char **nn)
 {
-	if (is_negative(esp, nn) && (!esp->h_p || esp->n_p) && esp->zero
-		&& esp->negative--)
+	if (is_negative(tab, nn) && (!tab->h_p || tab->n_p) && tab->zero
+		&& tab->negative--)
 	{
-		esp->space = 0;
-		esp->count += write(1, "-", 1);
+		tab->space = 0;
+		tab->tlen += write(1, "-", 1);
 	}
-	if (esp->negative)
-		esp->space = 0;
+	if (tab->negative)
+		tab->space = 0;
 }
 
-void	sign(t_spf *esp, char **nn, char c)
+void	sign(t_tprint *tab, char **nn, char c)
 {
-	sign_negative(esp, nn);
-	if (esp->h_w && esp->zero && !esp->h_p)
-		hash(esp, c, *nn);
-	if (esp->plus && esp->width > esp->len && !esp->negative && esp->h_p
-		&& esp->prcn == 0 && **nn != '0')
-		esp->width--;
-	else if (esp->plus && esp->width > esp->len && !esp->negative && !esp->h_p)
-		esp->width--;
-	else if (esp->plus && esp->width > esp->len && !esp->negative
-		&& esp->h_p && esp->prcn > 0)
-		esp->width--;
-	if (esp->space && esp->width > esp->len && !esp->plus && !esp->negative
-		&& esp->h_p && esp->prcn == 0 && **nn != '0')
-		esp->width--;
-	else if (esp->space && esp->width > esp->len && !esp->plus
-		&& !esp->negative && !esp->h_p)
-		esp->width--;
-	else if (esp->space && esp->width > esp->len && !esp->plus
-		&& !esp->negative && esp->h_p && esp->prcn > 0)
-		esp->width--;
-	sign_draw(esp, 1, *nn, c);
+	sign_negative(tab, nn);
+	if (tab->h_w && tab->zero && !tab->h_p)
+		hash(tab, c, *nn);
+	if (tab->plus && tab->width > tab->len && !tab->negative && tab->h_p
+		&& tab->prcn == 0 && **nn != '0')
+		tab->width--;
+	else if (tab->plus && tab->width > tab->len && !tab->negative && !tab->h_p)
+		tab->width--;
+	else if (tab->plus && tab->width > tab->len && !tab->negative
+		&& tab->h_p && tab->prcn > 0)
+		tab->width--;
+	if (tab->space && tab->width > tab->len && !tab->plus && !tab->negative
+		&& tab->h_p && tab->prcn == 0 && **nn != '0')
+		tab->width--;
+	else if (tab->space && tab->width > tab->len && !tab->plus
+		&& !tab->negative && !tab->h_p)
+		tab->width--;
+	else if (tab->space && tab->width > tab->len && !tab->plus
+		&& !tab->negative && tab->h_p && tab->prcn > 0)
+		tab->width--;
+	sign_draw(tab, 1, *nn, c);
 }

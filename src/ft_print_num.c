@@ -1,87 +1,87 @@
 #include <ft_printf.h>
 
-static void	manage_width(t_spf *esp, int k)
+static void	manage_width(t_tprint *tab, int k)
 {
-	if (!esp->left && !k)
+	if (!tab->left && !k)
 	{
-		while (esp->width > esp->len && (esp->width > esp->prcn || esp->n_p))
+		while (tab->width > tab->len && (tab->width > tab->prcn || tab->n_p))
 		{
-			draw_width(esp);
-			esp->width--;
+			draw_width(tab);
+			tab->width--;
 		}
 	}
-	if (esp->left && k)
+	if (tab->left && k)
 	{
-		while (esp->width > esp->len && (esp->width > esp->prcn || esp->n_p))
+		while (tab->width > tab->len && (tab->width > tab->prcn || tab->n_p))
 		{
-			draw_width(esp);
-			esp->width--;
+			draw_width(tab);
+			tab->width--;
 		}
 	}
 }
 
-static void	manage_precision(t_spf *esp)
+static void	manage_precision(t_tprint *tab)
 {
-	while (esp->prcn > esp->len && esp->prcn > 0 && !esp->n_p)
+	while (tab->prcn > tab->len && tab->prcn > 0 && !tab->n_p)
 	{
-		draw_precision(esp);
-		esp->prcn--;
+		draw_precision(tab);
+		tab->prcn--;
 	}
 }
 
-static void	manage_chr(t_spf *esp, char *nn)
+static void	manage_chr(t_tprint *tab, char *nn)
 {
 	int			i;
 
 	i = -1;
-	if (esp->len == 1 && esp->h_p && esp->prcn == 0 && *nn == '0' && !esp->h_w)
-		esp->len = 0;
-	if (esp->len == 1 && esp->h_p && esp->prcn == 0 && *nn == '0'
-		&& esp->h_w && !esp->width)
-		esp->len = 0;
-	if (esp->len == 1 && esp->h_p && esp->prcn == 0 && *nn == '0' && !esp->plus)
-		esp->count += write(1, " ", 1);
-	else if (esp->len == 1 && esp->h_p && esp->prcn == 0
-		&& *nn == '0' && esp->plus)
+	if (tab->len == 1 && tab->h_p && tab->prcn == 0 && *nn == '0' && !tab->h_w)
+		tab->len = 0;
+	if (tab->len == 1 && tab->h_p && tab->prcn == 0 && *nn == '0'
+		&& tab->h_w && !tab->width)
+		tab->len = 0;
+	if (tab->len == 1 && tab->h_p && tab->prcn == 0 && *nn == '0' && !tab->plus)
+		tab->tlen += write(1, " ", 1);
+	else if (tab->len == 1 && tab->h_p && tab->prcn == 0
+		&& *nn == '0' && tab->plus)
 		return ;
-	else if (esp->len > 0)
+	else if (tab->len > 0)
 		while (nn[++i])
-			esp->count += write(1, &nn[i], 1);
+			tab->tlen += write(1, &nn[i], 1);
 }
 
-static char	*get_num(char c, va_list *argp, t_spf *esp)
+static char	*get_num(char c, va_list *args, t_tprint *tab)
 {
 	char	*nn;
 
 	if (c == 'i' || c == 'd')
-		nn = ft_itoa(va_arg(*argp, int));
+		nn = ft_itoa(va_arg(*args, int));
 	else if (c == 'u')
-		nn = ft_itoa(va_arg(*argp, unsigned int));
+		nn = ft_itoa(va_arg(*args, unsigned int));
 	else if (c == 'x' || c == 'X')
-		nn = is_pnt_or_h(esp, va_arg(*argp, unsigned int), c);
+		nn = is_pnt_or_h(tab, va_arg(*args, unsigned int), c);
 	else if (c == 'p')
-		nn = is_pnt_or_h(esp, va_arg(*argp, unsigned long int), c);
+		nn = is_pnt_or_h(tab, va_arg(*args, unsigned long int), c);
 	else
 		return (0);
 	return (nn);
 }
 
-void	h_any_n(t_spf *esp, va_list *argp, char c)
+void	h_any_n(t_tprint *tab, va_list *args, char c)
 {
 	char		*nn;
 	char		*fnn;
 
-	nn = get_num(c, argp, esp);
+	nn = get_num(c, args, tab);
 	fnn = nn;
-	esp->len = ft_strlen(nn);
-	sign(esp, &nn, c);
-	manage_width(esp, 0);
-	sign_draw(esp, 0, nn, c);
-	manage_precision(esp);
+	tab->len = ft_strlen(nn);
+	sign(tab, &nn, c);
+	manage_width(tab, 0);
+	sign_draw(tab, 0, nn, c);
+	manage_precision(tab);
 	if (c == 'p')
-		esp->count += write(1, "0x", 2);
-	manage_chr(esp, nn);
-	manage_width(esp, 1);
+		tab->tlen += write(1, "0x", 2);
+	manage_chr(tab, nn);
+	manage_width(tab, 1);
 	free(fnn);
-	empty(esp);
+	empty(tab);
 }
