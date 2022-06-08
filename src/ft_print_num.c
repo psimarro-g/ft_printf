@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_num.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psimarro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/08 17:06:50 by psimarro          #+#    #+#             */
+/*   Updated: 2022/06/08 17:06:54 by psimarro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ft_printf.h>
 
 static void	manage_width(t_tprint *tab, int k)
@@ -20,8 +32,10 @@ static void	manage_width(t_tprint *tab, int k)
 	}
 }
 
-static void	manage_precision(t_tprint *tab)
+static void	manage_precision(t_tprint *tab, char c, char *nn)
 {
+	if (c == 'p' && (*nn == '0' || tab->prcn > tab->width))
+		tab->tlen += write(1, "0x", 2);
 	while (tab->prcn > tab->len && tab->prcn > 0 && !tab->n_p)
 	{
 		draw_precision(tab);
@@ -49,7 +63,7 @@ static void	manage_chr(t_tprint *tab, char *nn)
 			tab->tlen += write(1, &nn[i], 1);
 }
 
-static char	*get_num(char c, va_list *args, t_tprint *tab)
+static char	*get_number(char c, va_list *args, t_tprint *tab)
 {
 	char	*nn;
 
@@ -58,27 +72,27 @@ static char	*get_num(char c, va_list *args, t_tprint *tab)
 	else if (c == 'u')
 		nn = ft_itoa(va_arg(*args, unsigned int));
 	else if (c == 'x' || c == 'X')
-		nn = is_pnt_or_h(tab, va_arg(*args, unsigned int), c);
+		nn = is_pnt_or_hex(tab, va_arg(*args, unsigned int), c);
 	else if (c == 'p')
-		nn = is_pnt_or_h(tab, va_arg(*args, unsigned long int), c);
+		nn = is_pnt_or_hex(tab, va_arg(*args, unsigned long int), c);
 	else
 		return (0);
 	return (nn);
 }
 
-void	h_any_n(t_tprint *tab, va_list *args, char c)
+void	print_any_num(t_tprint *tab, va_list *args, char c)
 {
 	char		*nn;
 	char		*fnn;
 
-	nn = get_num(c, args, tab);
+	nn = get_number(c, args, tab);
 	fnn = nn;
 	tab->len = ft_strlen(nn);
 	sign(tab, &nn, c);
 	manage_width(tab, 0);
 	sign_draw(tab, 0, nn, c);
-	manage_precision(tab);
-	if (c == 'p')
+	manage_precision(tab, c, nn);
+	if (c == 'p' && *nn != '0' && tab->prcn < tab->width)
 		tab->tlen += write(1, "0x", 2);
 	manage_chr(tab, nn);
 	manage_width(tab, 1);

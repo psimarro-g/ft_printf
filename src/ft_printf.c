@@ -24,7 +24,7 @@ char	*get_spec(const char **format)
 	return (aux);
 }
 
-void	fill_tab(t_print *tab, va_list *args)
+void	fill_tab(t_tprint *tab, va_list *args)
 {
 	flags(tab);
 	width(tab, args);
@@ -38,13 +38,13 @@ void	find_format(const char **format, va_list *args, t_tprint *tab)
 
 	if (**format == '%' && *format + 1)
 	{
-		tab->cnt = get_spec(format);
-		aux = tab->cnt;
-		if (tab->cnt)
+		tab->fid = get_spec(format);
+		aux = tab->fid;
+		if (tab->fid)
 			fill_tab(tab, args);
-		if (!tab->cnt)
+		if (!tab->fid)
 			return ;
-		t_end = ft_strchrs(tab->cnt, FSPECS);
+		t_end = ft_strchrs(tab->fid, FSPECS);
 		if (*t_end == 'c' || *t_end == '%')
 			print_prc_char(tab, args, *t_end);
 		else if (*t_end == 's')
@@ -55,7 +55,7 @@ void	find_format(const char **format, va_list *args, t_tprint *tab)
 		free(aux);
 	}
 	else if (!(*format + 1))
-		return;
+		return ;
 	else
 		tab->tlen += write(1, *format, 1);
 }
@@ -64,9 +64,9 @@ int	ft_printf(const char *format, ...)
 {
 	va_list		args;
 	t_tprint	*tab;
-	int			cnt;
+	int			ret;
 
-	tab = (t_print *)ft_calloc(1, sizeof(t_print));
+	tab = (t_tprint *)ft_calloc(1, sizeof(t_tprint));
 	va_start(args, format);
 	while (*format)
 	{
@@ -74,7 +74,7 @@ int	ft_printf(const char *format, ...)
 		format++;
 	}
 	va_end(args);
-	cnt = tab->tlen;
+	ret = tab->tlen;
 	free(tab);
-	return (cnt);
+	return (ret);
 }

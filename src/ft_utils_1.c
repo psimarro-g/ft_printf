@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils_1.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psimarro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/08 17:07:25 by psimarro          #+#    #+#             */
+/*   Updated: 2022/06/08 17:07:25 by psimarro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ft_printf.h>
 
 void	flags(t_tprint *tab)
@@ -65,23 +77,21 @@ void	precision(t_tprint *tab, va_list *args)
 		tab->h_p = 0;
 }
 
-
 void	empty(t_tprint *tab)
 {
 	int		auxcount;
 
-	auxcount = tab->count;
+	auxcount = tab->tlen;
 	ft_bzero(tab, sizeof(*tab));
-	tab->count = auxcount;
+	tab->tlen = auxcount;
 }
-
 
 int	star(t_tprint *tab, va_list *args)
 {
 	if (*tab->fid == '*')
 	{
 		tab->fid++;
-		if (!tab->h_p)
+		if (!tab->h_p && !(*tab->fid >= '0' && *tab->fid <= '9'))
 			tab->h_w = 1;
 		return (va_arg(*args, int));
 	}

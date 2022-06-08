@@ -19,6 +19,7 @@
 */
 # include <libft.h>
 # include <stdarg.h>
+# include <stdlib.h>
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 ** MACROS
@@ -103,7 +104,7 @@ void			empty(t_tprint *tab);
 void			print_string(t_tprint *tab, va_list *args);
 int				star(t_tprint *tab, va_list *args);
 int				is_negative(t_tprint *tab, char **nn);
-char			*is_pnt_or_h(t_tprint *tab, long long unsigned int n, char c);
+char			*is_pnt_or_hex(t_tprint *tab, long long unsigned int n, char c);
 void			hash(t_tprint *tab, char c, char *nn);
 void			sign(t_tprint *tab, char **nn, char c);
 void			sign_draw(t_tprint *tab, int k, char *nn, char c);

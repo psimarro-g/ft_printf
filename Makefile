@@ -22,7 +22,7 @@ NAME = libftprintf.a
 # **************************************************************************** #
 
 CC 		= gcc
-CFLAGS	= -Wall #-Wextra -Werror -g #quitar g3 despues
+CFLAGS	= -Wall -Wextra -Werror
 RM		= rm -f
 
 # **************************************************************************** #
@@ -34,7 +34,7 @@ RM		= rm -f
 # **************************************************************************** #
 
 SRC_DIR				=	src/
-SRC =	ft_printf.c					ft_is_pnt_or_h.c		\
+SRC =	ft_printf.c					ft_is_pnt_or_hex.c		\
 		ft_num_utils.c				ft_print_char.c		\
 		ft_print_str.c				ft_print_num.c 	\
 		ft_utils_1.c				ft_utils_2.c
@@ -80,4 +80,4 @@ fclean:				clean
 
 re:			fclean all
 
-bonus:
+bonus:		re

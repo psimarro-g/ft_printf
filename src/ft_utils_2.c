@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psimarro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/08 20:40:11 by psimarro          #+#    #+#             */
+/*   Updated: 2022/06/08 20:40:16 by psimarro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ft_printf.h>
 
-void	draw_width(t_tvoid	hash(t_tprint *tab)
+void	draw_width(t_tprint *tab)
 {
 	if (tab->zero && !tab->prcn && tab->n_p && !tab->left)
 		tab->tlen += write(1, "0", 1);
@@ -12,7 +24,7 @@ void	draw_width(t_tvoid	hash(t_tprint *tab)
 		tab->tlen += write(1, " ", 1);
 }
 
-void	draw_precision(t_tvoid	hash(t_tprint *tab)
+void	draw_precision(t_tprint *tab)
 {
 	if ((tab->zero || (tab->width && tab->prcn) || tab->h_p) && !tab->n_p)
 	{

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_str.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psimarro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/08 17:07:03 by psimarro          #+#    #+#             */
+/*   Updated: 2022/06/08 17:07:05 by psimarro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ft_printf.h>
 
-void	h_string(t_tprint *tab, va_list *args)
+void	print_string(t_tprint *tab, va_list *args)
 {
 	int		i;
 	char	*str;
@@ -17,7 +29,7 @@ void	h_string(t_tprint *tab, va_list *args)
 			draw_width(tab);
 	if (!tab->h_p || tab->prcn != 0 || tab->n_p)
 		while (str[++i] && (i < tab->prcn || tab->prcn == 0 || tab->n_p))
-			tab->count += write(1, &str[i], 1);
+			tab->tlen += write(1, &str[i], 1);
 	if (tab->left)
 		while (tab->width-- > tab->len)
 			draw_width(tab);
