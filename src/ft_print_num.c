@@ -32,9 +32,9 @@ static void	manage_width(t_tprint *tab, int k)
 	}
 }
 
-static void	manage_precision(t_tprint *tab, char c, char *nn)
+static void	manage_precision(t_tprint *tab, char c)
 {
-	if (c == 'p' && (*nn == '0' || tab->prcn > tab->width))
+	if (c == 'p')
 		tab->tlen += write(1, "0x", 2);
 	while (tab->prcn > tab->len && tab->prcn > 0 && !tab->n_p)
 	{
@@ -91,9 +91,7 @@ void	print_any_num(t_tprint *tab, va_list *args, char c)
 	sign(tab, &nn, c);
 	manage_width(tab, 0);
 	sign_draw(tab, 0, nn, c);
-	manage_precision(tab, c, nn);
-	if (c == 'p' && *nn != '0' && tab->prcn < tab->width)
-		tab->tlen += write(1, "0x", 2);
+	manage_precision(tab, c);
 	manage_chr(tab, nn);
 	manage_width(tab, 1);
 	free(fnn);

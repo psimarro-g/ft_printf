@@ -67,7 +67,7 @@ test:				re
 Libft/libft.a:
 	$(MAKE) -C Libft
 
-.PHONY:		all clean fclean re			
+.PHONY:		all clean fclean re	bonus		
 
 clean:
 	$(RM) -rf $(OBJ_DIR)
